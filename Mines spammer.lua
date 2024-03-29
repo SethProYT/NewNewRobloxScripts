@@ -1,25 +1,14 @@
-local Tab = {}
+local plr = game.Players.LocalPlayer
+local mines = workspace.Map.Obstacles.Minefield.Mines
 
-for i,v in next, workspace:GetDescendants() do
-    if v:IsA'TouchTransmitter' then
-        table.insert(Tab,v)
+
+
+
+for _, v in pairs(mines:GetDescendants()) do
+    if v.ClassName == "TouchTransmitter" then
+        firetouchinterest(plr.Character.HumanoidRootPart,v.Parent,0)
+		wait(0.4)
+        firetouchinterest(plr.Character.HumanoidRootPart,v.Parent,1)
     end
 end
-local plr=game:GetService'Players'.LocalPlayer
-spawn(function()
-    local UIS=game:GetService'UserInputService'
-    UIS.InputBegan:Connect(function(Key)
-        if Key.KeyCode==Enum.KeyCode.J and not UIS:GetFocusedTextBox() then
-            for i,v in next,Tab do
-                if v:IsA'TouchTransmitter' then
-                    print'Fired!'
-                    if firetouchinterest then
-                        firetouchinterest(plr.Character.HumanoidRootPart,v.Parent,0)
-                        wait()
-                        firetouchinterest(plr.Character.HumanoidRootPart,v.Parent,1)
-                    end
-                end
-            end
-        end
-    end)
-end)
+
