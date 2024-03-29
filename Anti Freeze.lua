@@ -6,3 +6,4 @@ for i,v in pairs(char:GetChildren()) do
         v.Anchored = false
     end
 end
+-- womp womp
