@@ -57,7 +57,7 @@ local function HitboxExpander()
             end
         end
     else
-        print("Hitbox expander is off")
+        return
     end
 end
 
@@ -181,7 +181,6 @@ local function csgomode()
         if v ~= nil then
             continue
             else if v == nil then
-                print("there's nothing")
                 break
             end
         end
@@ -243,7 +242,7 @@ local function killaura()
         local touchparent = touch.Parent
         local mainplr = game:GetService("Players").LocalPlayer.Character
 
-        if mainplr == touchparent then print("this is the player i dont wanna hit myself") return end
+        if mainplr == touchparent then return end
 
 
         if touchparent:FindFirstChild("HumanoidRootPart") then
@@ -268,7 +267,6 @@ local function killaura()
         local plr = Players:GetPlayerFromCharacter(touch.Parent)
         if plr.Character:FindFirstChild("Humanoid") then
             touchended = true
-            print("touch ended")
         end
     end)
 end
@@ -422,7 +420,6 @@ while wait(60) do
 end
 
 game.Players.LocalPlayer.Character.HumanoidRootPart.Humanoid.Died:Connect(function() 
-    print("plr died")
     game.Players.LocalPlayer.Character.HumanoidRootPart.Humanoid["redbull"]:Destroy()
     killauratoggle = false
     stopFOVChange()
