@@ -238,12 +238,14 @@ local function killaura()
     Weld.Part1 = Character.HumanoidRootPart
     Weld.Parent = Part
 
+
     Part.Touched:Connect(function(touch)
         local touchparent = touch.Parent
         local mainplr = game:GetService("Players").LocalPlayer.Character
 
         if mainplr == touchparent then return end
 
+        if not touchparent:FindFirstChild("HumanoidRootPart") then return end
 
         if touchparent:FindFirstChild("HumanoidRootPart") then
             local player = Players:GetPlayerFromCharacter(touchparent)
@@ -258,9 +260,9 @@ local function killaura()
             until touchended
 
             touchended = false
-        else 
+        else
             return
-        end
+        end    
     end)
 
     Part.TouchEnded:Connect(function(touch)
