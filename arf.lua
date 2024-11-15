@@ -246,6 +246,7 @@ local function killaura()
         local mainplr = game:GetService("Players").LocalPlayer.Character
         local player = Players:GetPlayerFromCharacter(touchparent)
 
+        if touch.Parent == mainplr then return end
 
         if touchparent:FindFirstChild("HumanoidRootPart") and touchparent ~= nil and touchparent then
             repeat
