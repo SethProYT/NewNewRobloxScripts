@@ -252,6 +252,7 @@ local function killaura()
         if touchparent:FindFirstChild("HumanoidRootPart") and touchparent ~= nil and touchparent then
             
             repeat
+                wait(1)
                 game:GetService("Players").LocalPlayer.Character.Crowbar.Events.Attack:FireServer()
                 wait(0.1)
                 game:GetService("Players").LocalPlayer.Character.Crowbar.Events.Hit:InvokeServer(
