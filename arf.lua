@@ -242,13 +242,15 @@ local function killaura()
     Part.Touched:Connect(function(touch)
         local touchparent = touch.Parent
         local mainplr = game:GetService("Players").LocalPlayer.Character
+        local player = Players:GetPlayerFromCharacter(touchparent)
 
+        
         if mainplr == touchparent then return end
+        if player == nil then return end
+        if touchparent == nil then return end
 
-        if not touchparent:FindFirstChild("HumanoidRootPart") then return end
-
-        if touchparent:FindFirstChild("HumanoidRootPart") then
-            local player = Players:GetPlayerFromCharacter(touchparent)
+        if touchparent:FindFirstChild("HumanoidRootPart") and touchparent ~= nil and touchparent then
+            
             repeat
                 game:GetService("Players").LocalPlayer.Character.Crowbar.Events.Attack:FireServer()
                 wait(0.1)
