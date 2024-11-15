@@ -248,6 +248,7 @@ local function killaura()
         if mainplr == touchparent then return end
         if player == nil then return end
         if touchparent == nil then return end
+        if mainplr.Crowbar == nil then return end
 
         if touchparent:FindFirstChild("HumanoidRootPart") and touchparent ~= nil and touchparent then
             
