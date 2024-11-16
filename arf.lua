@@ -240,56 +240,48 @@ local function NOCOOLDOWNGRAB()
 end
 
 local function killaura()
-    if killauratoggle then return end
+    game:GetService("RunService").RenderStepped:Connect(function()
+        local LocalPlayer = game:GetService("Players").LocalPlayer
+        
+        -- Iterate through all players
+        for _, v in pairs(game.Players:GetPlayers()) do
+            if v == LocalPlayer then continue end
+            if v.Parent == nil then continue end
+            if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Crowbar") == nil then
+                repeat wait() until LocalPlayer.Character:FindFirstChild("Crowbar") ~= nil
+            end
 
-    local LocalPlayer = game:GetService("Players").LocalPlayer
-    local Character = LocalPlayer.Character
-    local Part = Instance.new("Part")
-    local Weld = Instance.new("Weld")
-    local Players = game:GetService("Players")
+            local trgt = v.Character
+            if not trgt then continue end
+            local humanoidRootPart = trgt:FindFirstChild("HumanoidRootPart")
+            
+            -- Skip if HumanoidRootPart is missing or health is 0
+            if not humanoidRootPart or trgt:FindFirstChild("Humanoid").Health <= 0 then continue end
+            
+            local dist = LocalPlayer:DistanceFromCharacter(humanoidRootPart.Position)
+            print(dist)
 
-    Part.Parent = Character.HumanoidRootPart
-    Part.Size = Vector3.new(8,8,8)
-    Part.Transparency = 0.5
-    Part.CFrame = Character.HumanoidRootPart.CFrame
-    Part.Anchored = false
-    Part.CanCollide = false
-    Part.CanQuery = false
-    Part.CanTouch = true
-    Part.Massless = true
-    Part.CollisionGroup = "HumanoidRootPart"
-    Part.EnableFluidForces = false
-
-    Weld.Part0 = Part
-    Weld.Part1 = Character.HumanoidRootPart
-    Weld.Parent = Part
-
-
-    Part.Touched:Connect(function(touch)
-        if not touch:IsA("BasePart") then return end
-
-        local touchparent = touch.Parent
-        local mainplr = game:GetService("Players").LocalPlayer.Character
-        local player = Players:GetPlayerFromCharacter(touchparent)
-
-        if touch.Parent == mainplr then return end
-
-        if touchparent:FindFirstChild("HumanoidRootPart") and touchparent ~= nil and touchparent then
-                mainplr.Crowbar.Events.Attack:FireServer()
-                mainplr.Crowbar.Events.Hit:InvokeServer(
-                    player.Character:FindFirstChild("Humanoid"),
-                    player.Character:FindFirstChild("Head")
+            if dist <= 10 then
+                LocalPlayer.Character.Crowbar.Events.Attack:FireServer()
+                LocalPlayer.Character.Crowbar.Events.Hit:InvokeServer(
+                    trgt:FindFirstChild("Humanoid"),
+                    trgt:FindFirstChild("Head")
                 )
-                playanimation("rbxassetid://96204893863429")
-                Weld.Part0 = Character.HumanoidRootPart
-                Part.CFrame = CFrame.new(10000, 10000, 10000)
-                Part.CFrame = Character.HumanoidRootPart.CFrame
-                Weld.Part0 = Part
-        else
-            return
-        end    
+
+                local humanoid = LocalPlayer.Character:WaitForChild("Humanoid")
+                local animator = humanoid:WaitForChild("Animator")
+                local animation = Instance.new("Animation")
+                animation.AnimationId = "rbxassetid://96204893863429"
+                local animationTrack = animator:LoadAnimation(animation)
+                
+                animationTrack:AdjustSpeed(0.2)
+                animationTrack:Play()
+                animationTrack:Destroy()
+            end
+        end
     end)
 end
+
 
 local function antiragdoll()
     local old_namecall
