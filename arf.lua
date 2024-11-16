@@ -35,6 +35,19 @@ ReplicatedStorage.Settings.Blood.Value = true
 ReplicatedStorage.Settings.Shadows.Value = false
 
 
+local function playanimation(id)
+    local humanoid = game.Players.LocalPlayer.Character:WaitForChild("Humanoid")
+    local animator = humanoid:WaitForChild("Animator")
+    local nigganigger = Instance.new("Animation")
+    nigganigger.AnimationId = id
+    local nigganiggernigga = animator:LoadAnimation(nigganigger)
+
+    nigganiggernigga:AdjustSpeed(0.5)
+    nigganiggernigga:Play()
+    nigganiggernigga:Destroy()
+end
+
+
 local function HitboxExpander() 
     local LocalPlayer = game.Players.LocalPlayer
     if hb == true then 
@@ -62,7 +75,20 @@ local function HitboxExpander()
 end
 
 local function spam_landmines()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/SethProYT/NewNewRobloxScripts/refs/heads/main/Mines%20spammer.lua"))()
+    local plr = game.Players.LocalPlayer
+    local mines = workspace.Map.Obstacles.Minefield.Mines
+
+
+
+    while wait() do
+        for _, v in pairs(mines:GetDescendants()) do
+            if v.ClassName == "TouchTransmitter" then
+                firetouchinterest(plr.Character.HumanoidRootPart,v.Parent,0)
+                wait(0.4)
+                firetouchinterest(plr.Character.HumanoidRootPart,v.Parent,1)
+            end
+        end
+    end
 end
 
 local function show_landmines() 
@@ -223,7 +249,7 @@ local function killaura()
     local Players = game:GetService("Players")
 
     Part.Parent = Character.HumanoidRootPart
-    Part.Size = Vector3.new(7,7,7)
+    Part.Size = Vector3.new(8,8,8)
     Part.Transparency = 0.5
     Part.CFrame = Character.HumanoidRootPart.CFrame
     Part.Anchored = false
@@ -249,29 +275,19 @@ local function killaura()
         if touch.Parent == mainplr then return end
 
         if touchparent:FindFirstChild("HumanoidRootPart") and touchparent ~= nil and touchparent then
-            repeat
-                wait(1)
                 mainplr.Crowbar.Events.Attack:FireServer()
-                wait(0.1)
                 mainplr.Crowbar.Events.Hit:InvokeServer(
                     player.Character:FindFirstChild("Humanoid"),
                     player.Character:FindFirstChild("Head")
                 )
-                wait()
-            until touchended
-
-            touchended = false
+                playanimation("rbxassetid://96204893863429")
+                Weld.Part0 = Character.HumanoidRootPart
+                Part.CFrame = CFrame.new(10000, 10000, 10000)
+                Part.CFrame = Character.HumanoidRootPart.CFrame
+                Weld.Part0 = Part
         else
             return
         end    
-    end)
-
-    Part.TouchEnded:Connect(function(touch)
-        if not touch:IsA("BasePart") then return end
-        local plr = Players:GetPlayerFromCharacter(touch.Parent)
-        if plr.Character:FindFirstChild("Humanoid") then
-            touchended = true
-        end
     end)
 end
 
@@ -286,6 +302,8 @@ local function antiragdoll()
         return old_namecall(self, ...)
     end))
 end
+
+
 
 
 HBSection:NewToggle("Hit head (for hitbox expander)", "this enables the ability to always hit head (ragdoll hits)", function(state)
